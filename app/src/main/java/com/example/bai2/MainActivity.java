@@ -34,15 +34,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    MessageAdapter adapter;
-
-    List<MessageModel> messageList; //bien toan cuc
-    AppCompatButton button;
+    List<MessageModel> messageList;
+    AppCompatButton button,button_next,button_back;
     TextView id,iduser,title,message, txt_dem;
-    Gson gson;
-    MessageModel messageModule = new MessageModel();
     private static final String CHANNEL_ID = "my_channel_id";
-    String json;
     int dem=0;
 
     @Override
@@ -56,6 +51,20 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         anhXa();
+
+        button_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tang(view);
+            }
+        });
+
+        button_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                giam(view);
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                                 MessageAdapter adapter;
                                 adapter = new MessageAdapter(getApplicationContext(), messageList);
                                 recyclerView.setAdapter(adapter);
-                                MessageModel messageModel = messageList.get(dem); // Lấy bài viết đầu tiên
+                                MessageModel messageModel = messageList.get(dem);
                                 id.setText(String.valueOf(messageModel.getId()));
                                 iduser.setText(String.valueOf(messageModel.getUserId()));
                                 title.setText(messageModel.getTitle());
@@ -106,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void anhXa() {
         button = findViewById(R.id.button);
+        button_back = findViewById(R.id.button_back);
+        button_next = findViewById(R.id.button_next);
         id = findViewById(R.id.id1);
         title = findViewById(R.id.title1);
         message = findViewById(R.id.message1);
@@ -160,5 +171,21 @@ public class MainActivity extends AppCompatActivity {
 
         // Hiển thị thông báo
         notificationManager.notify(1, builder.build());
+    }
+    public void giam(View view) {
+        if(messageList==null)return;
+        if(dem>0)dem--;
+        if(dem>=0)
+        {
+            HienThi1PT();
+        }
+    }
+    public void tang(View view) {
+        if(messageList==null)return;
+        if(dem < messageList.size()-1)dem++;
+        if(dem < messageList.size())
+        {
+            HienThi1PT();
+        }
     }
 }
